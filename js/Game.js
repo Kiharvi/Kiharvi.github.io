@@ -39,11 +39,6 @@ InfiniteScroller.Game.prototype = {
     this.game.physics.arcade.enable(this.ground);
     this.platforms = this.add.physicsGroup();
 
-
-this.platforms.setAll('body.allowGravity', false);
-this.platforms.setAll('body.immovable', true);
-this.platforms.setAll('body.velocity.x', 0);
-
     //player gravity
     this.player.body.gravity.y = 1000;
     
