@@ -39,6 +39,11 @@ InfiniteScroller.Game.prototype = {
     this.game.physics.arcade.enable(this.ground);
     this.platforms = this.add.physicsGroup();
 
+
+this.platforms.setAll('body.allowGravity', false);
+this.platforms.setAll('body.immovable', true);
+this.platforms.setAll('body.velocity.x', 0);
+
     //player gravity
     this.player.body.gravity.y = 1000;
     
@@ -83,12 +88,10 @@ InfiniteScroller.Game.prototype = {
     this.maxScratches = 5;
     
     //create an array of possible toys that can be gathered from toy mounds
-    var bone = this.game.add.sprite(0, this.game.height-130, 'bone');
     var ball = this.game.add.sprite(0, this.game.height-130, 'ball');
-    bone.visible = false;
     ball.visible = false;
-    this.toys = [bone, ball];
-    this.currentToy = bone;
+    this.toys = [ball];
+    this.currentToy = ball;
     
     //stats
     var style1 = { font: "20px Arial", fill: "#ff0"};
@@ -117,7 +120,7 @@ InfiniteScroller.Game.prototype = {
     //we also don't want to do anything if the player is stopped for scratching or digging
     if(this.player.alive && !this.stopped) {
       
-      this.player.body.velocity.x = 300;
+      this.player.body.velocity.x = 200;
       
       //We do a little math to determine whether the game world has wrapped around.
       //If so, we want to destroy everything and regenerate, so the game will remain random
@@ -145,9 +148,11 @@ InfiniteScroller.Game.prototype = {
       //  because of latency problems (it takes too long to jump before hitting a flea)
       if (this.swipe.isDown && (this.swipe.positionDown.y > this.swipe.position.y)) {
         this.playerJump();
+        this.player.body.velocity.x = 25;
       }
       else if (this.cursors.up.isDown) {
         this.playerJump();
+        this.player.body.velocity.x = 25;
       }
     
       //The game world is infinite in the x-direction, so we wrap around.
@@ -172,13 +177,15 @@ InfiniteScroller.Game.prototype = {
     //remove the flea that bit our player so it is no longer in the way
     flea.destroy();
     
+    
     //update our stats
     this.scratches++;
+    this.points -= 5;
     this.refreshStats();
     
     //change sprite image
     this.player.loadTexture('playerScratch');
-    this.player.animations.play('scratch', 10, true);
+    this.player.animations.play('scratch', 0, true);
     
     //play audio
     //this.whineSound.play();
@@ -186,7 +193,7 @@ InfiniteScroller.Game.prototype = {
     //wait a couple of seconds for the scratch animation to play before continuing
     this.stopped = true;
     this.player.body.velocity.x = 0;
-    this.game.time.events.add(Phaser.Timer.SECOND * 2, this.playerScratch, this);
+    this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.playerScratch, this);
   },
   //the player is collecting a toy from a mound
   collect: function(player, mound) {
@@ -204,7 +211,7 @@ InfiniteScroller.Game.prototype = {
       //we stop a couple of seconds for the dig animation to play
       this.stopped = true;
       this.player.body.velocity.x = 0;
-      this.game.time.events.add(Phaser.Timer.SECOND * 2, this.playerDig, this);
+      this.game.time.events.add(Phaser.Timer.SECOND * 0.5, this.playerDig, this);
     }
   },
   gameOver: function() {
@@ -236,11 +243,10 @@ InfiniteScroller.Game.prototype = {
     this.currentMound.destroy();
     
     //refresh our points stats
-    this.points += 5;
+    this.points += 10;
     this.refreshStats();
     
-    //randomly pull a toy from the array
-    this.currentToy = this.toys[ Math.floor( Math.random() * this.toys.length ) ];
+    
     
     //make the toy visible where the mound used to be
     this.currentToy.visible = true;
@@ -299,7 +305,7 @@ InfiniteScroller.Game.prototype = {
     this.mounds.enableBody = true;
 
     //phaser's random number generator
-    var numMounds = this.game.rnd.integerInRange(0, 5)
+    var numMounds = this.game.rnd.integerInRange(1, 5)
     var mound;
 
     for (var i = 0; i < numMounds; i++) {
@@ -318,7 +324,7 @@ InfiniteScroller.Game.prototype = {
     this.fleas.enableBody = true;
 
     //phaser's random number generator
-    var numFleas = this.game.rnd.integerInRange(1, 5)
+    var numFleas = this.game.rnd.integerInRange(3, 4)
     var flea;
 
     for (var i = 0; i < numFleas; i++) {
@@ -328,7 +334,7 @@ InfiniteScroller.Game.prototype = {
       flea = this.fleas.create(x, this.game.height-160, 'flea');
 
       //physics properties
-      flea.body.velocity.x = this.game.rnd.integerInRange(-20, 0);
+      flea.body.velocity.x = this.game.rnd.integerInRange(-300, -250, -275);
       
       flea.body.immovable = true;
       flea.body.collideWorldBounds = false;

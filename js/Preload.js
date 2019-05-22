@@ -28,7 +28,7 @@ InfiniteScroller.Preload.prototype = {
     this.load.image('mound', 'assets/kuvat/rock.png');
     
     //Adapted from https://openclipart.org/detail/6570/flea:
-    this.load.spritesheet('flea', 'assets/kuvat/leijona.png', 136, 100, 2);
+    this.load.spritesheet('flea', 'assets/kuvat/leijona.png', 120, 100, 2);
     
     //https://www.stockio.com/free-icon/easterly-icons-carrot
     this.load.image('bone', 'assets/kuvat/porkkana.png');
