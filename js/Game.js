@@ -120,7 +120,7 @@ this.platforms.setAll('body.velocity.x', 0);
     //we also don't want to do anything if the player is stopped for scratching or digging
     if(this.player.alive && !this.stopped) {
       
-      this.player.body.velocity.x = 200;
+      this.player.body.velocity.x = 230;
       
       //We do a little math to determine whether the game world has wrapped around.
       //If so, we want to destroy everything and regenerate, so the game will remain random
@@ -334,7 +334,7 @@ this.platforms.setAll('body.velocity.x', 0);
       flea = this.fleas.create(x, this.game.height-160, 'flea');
 
       //physics properties
-      flea.body.velocity.x = this.game.rnd.integerInRange(-300, -250, -275);
+      flea.body.velocity.x = this.game.rnd.integerInRange(-270, -240, -265);
       
       flea.body.immovable = true;
       flea.body.collideWorldBounds = false;
